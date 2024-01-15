@@ -112,8 +112,6 @@ func Update(c *fiber.Ctx) error {
 		return c.Status(400).JSON(fiber.Map{"invalid id": err.Error()})
 	}
 
-	fmt.Println(id)
-	fmt.Println(updateData)
 	result, err := collection.UpdateOne(c.Context(), bson.M{"_id": dbId}, bson.M{"$set": updateData})
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
