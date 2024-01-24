@@ -46,21 +46,21 @@ func GetAll(c *fiber.Ctx) error {
 	// filter := json.M{}
 	// opts := options.Find().SetSkip(0).SetLimit(100)
 
-	// find all todos
+	// find all admin
 	cursor, err := collection.Find(c.Context(), bson.M{})
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
 	}
 
 	// convert cursor to slice
-	todos := make([]models.Admins, 0)
+	admins := make([]models.Admins, 0)
 	// fmt.Print(cursor.All(c.Context(), &todos))
-	if err = cursor.All(c.Context(), &todos); err != nil {
+	if err = cursor.All(c.Context(), &admins); err != nil {
 		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
 	}
 
 	// return todos
-	return c.Status(200).JSON(todos)
+	return c.Status(200).JSON(admins)
 
 }
 
