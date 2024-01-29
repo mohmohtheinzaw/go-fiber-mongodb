@@ -60,6 +60,7 @@ func LoginAdmin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Email is required"})
 	}
 	filter := bson.D{{"email", email}}
+	//filter := bson.M{"email", email}
 
 	// Find admin by email
 	err := collection.FindOne(c.Context(), filter).Decode(&admin)
