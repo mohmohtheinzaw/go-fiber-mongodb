@@ -1,8 +1,8 @@
 package main
 
 import (
-	routes "go-test/router"
-	"go-test/src/database"
+	routes "go_jwt/router"
+	"go_jwt/src/database"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -13,7 +13,7 @@ func main() {
 	app.Use(logger.New())
 	setupRoutes(app)
 
-	app.Listen(":6000")
+	app.Listen(":6001")
 }
 
 func setupRoutes(app *fiber.App) {
@@ -34,4 +34,5 @@ func setupRoutes(app *fiber.App) {
 	// api group
 	api := app.Group("/api")
 	routes.AdminRoute(api.Group("/admins"))
+	//routes.AuthRoute(api.Group("/auth"))
 }

@@ -1,9 +1,9 @@
-package AdminControllers
+package controller
 
 import (
 	"fmt"
-	"go-test/src/database"
-	models "go-test/src/model"
+	"go_jwt/src/database"
+	models "go_jwt/src/model"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,6 +17,10 @@ import (
 //		Location string `json:"location,omitempty" validate:"required"`
 //		Title    string `json:"title,omitempty" validate:"required"`
 //	}
+
+type LoginType struct {
+	ID string
+}
 
 func Create(c *fiber.Ctx) error {
 	data := new(models.Admins)
@@ -35,6 +39,10 @@ func Create(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"Internal server error": err.Error()})
 	}
+	// Generate token
+
+	token := GenerateToken(data.Id.Hex())
+	fmt.Print(token)
 
 	// return the inserted todo
 	fmt.Print(result.InsertedID)
