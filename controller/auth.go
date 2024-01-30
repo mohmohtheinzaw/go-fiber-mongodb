@@ -20,16 +20,7 @@ func GenerateToken(id string) string {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	t, _ := token.SignedString([]byte("secret"))
-	// if err != nil {
-	// 	return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
-	// }
-
 	return t
-}
-
-type Admin struct {
-	Email string `json:"email" bson:"email"`
-	//Password string `json:"password" bson:"password"`
 }
 
 func LoginAdmin(c *fiber.Ctx) error {
@@ -58,4 +49,13 @@ func LoginAdmin(c *fiber.Ctx) error {
 	// Generate token
 	token := GenerateToken(admin.Id.Hex())
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
+}
+
+func Validate(r *http.Request) {
+	fmt.Println(r.Header.Get("Authorization"))
+	// Get all headers
+	headers := r.Header
+	fmt.Println("All Headers:")
+	fmt.Println(headers)
+	//middleware.ExtractTokenFromHeader(r.)
 }

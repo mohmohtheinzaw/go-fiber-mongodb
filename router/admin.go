@@ -13,4 +13,5 @@ func AdminRoute(router fiber.Router) {
 	router.Put("/:id", AdminControllers.Update)
 	router.Delete("/:id", AdminControllers.Delete)
 	router.Post("/login", AdminControllers.LoginAdmin)
+	//router.Get("/validate/test", AdminControllers.Validate)
 }

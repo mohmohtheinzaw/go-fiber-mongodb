@@ -14,6 +14,7 @@ func main() {
 	setupRoutes(app)
 
 	app.Listen(":6001")
+
 }
 
 func setupRoutes(app *fiber.App) {
