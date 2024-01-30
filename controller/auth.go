@@ -1,15 +1,16 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"go_jwt/src/database"
 	models "go_jwt/src/model"
+	"net/http"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func GenerateToken(id string) string {
@@ -26,49 +27,32 @@ func GenerateToken(id string) string {
 	return t
 }
 
-// func LoginAdmin(c *fiber.Ctx) error {
-// 	collection := database.GetCollection("admins")
-// 	var admin models.Admins
-// 	email := c.FormValue("email")
-// 	fmt.Println(email)
-// 	if err := c.FormValue("email"); err != nil {
-// 		fmt.Println(err)
-// 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Invalid request body"})
-// 	}
-// 	fmt.Println("this", c.FormValue("email"))
-// 	err := collection.FindOne(c.Context(), bson.M{"email": "test@gmail.com"}).Decode(&admin)
-
-// 	if err != nil {
-// 		fmt.Print(err)
-// 		//return c.Status(404).JSON(fiber.Map{"error": err.Error()})
-// 	}
-// 	fmt.Println("admin is", admin)
-// 	fmt.Println(admin.Id)
-// 	token := GenerateToken(admin.Id.Hex())
-// 	return c.Status(200).JSON(token)
-
-// }
+type Admin struct {
+	Email string `json:"email" bson:"email"`
+	//Password string `json:"password" bson:"password"`
+}
 
 func LoginAdmin(c *fiber.Ctx) error {
 	collection := database.GetCollection("admins")
-	var admin models.Admins
+	admin := new(models.Admins)
 
-	// Get email from the request body
-	email := c.FormValue("email")
-	fmt.Println(email)
-	if email == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": "Email is required"})
+	//Parse req.body and check validation
+
+	if err := c.BodyParser(admin); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
 	}
-	filter := bson.D{{"email", email}}
-	//filter := bson.M{"email", email}
+	// Get email from the request body
+	filter := bson.M{"email": admin.Email}
+	var foundAdmin models.Admins
 
-	// Find admin by email
-	err := collection.FindOne(c.Context(), filter).Decode(&admin)
+	err := collection.FindOne(context.Background(), filter).Decode(&foundAdmin)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Admin not found"})
-		}
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Internal Server Error"})
+		fmt.Println(err)
+		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
 	}
 
 	// Generate token
