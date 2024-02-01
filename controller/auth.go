@@ -51,7 +51,7 @@ func LoginAdmin(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
 }
 
-func Validate(token string) string {
+func Validate(c *fiber.Ctx) error {
 	token := c.Get("Authorization")
 
 	fmt.Println(token)
