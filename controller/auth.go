@@ -51,11 +51,13 @@ func LoginAdmin(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
 }
 
-func Validate(r *http.Request) {
-	fmt.Println(r.Header.Get("Authorization"))
+func Validate(token string) string {
+	token := c.Get("Authorization")
+
+	fmt.Println(token)
 	// Get all headers
-	headers := r.Header
 	fmt.Println("All Headers:")
-	fmt.Println(headers)
+	return ""
+	//fmt.Println(headers)
 	//middleware.ExtractTokenFromHeader(r.)
 }
