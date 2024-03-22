@@ -11,10 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// type LoginType struct {
-// 	ID string
-// }
-
 func Create(c *fiber.Ctx) error {
 	data := new(models.Admins)
 	data.CreatedAt = time.Now().UTC()
