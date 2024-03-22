@@ -7,7 +7,7 @@ import (
 )
 
 type Users struct {
-	Id        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty" `
 	Username  string
 	Email     string
 	CreatedAt time.Time
@@ -15,7 +15,7 @@ type Users struct {
 }
 
 type Admins struct {
-	Id        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty" `
 	Name      string
 	Email     string
 	CreatedAt time.Time

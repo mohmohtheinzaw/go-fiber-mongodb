@@ -36,5 +36,6 @@ func setupRoutes(app *fiber.App) {
 	// api group
 	api := app.Group("/api")
 	routes.AdminRoute(api.Group("/admins"))
+	routes.UserRoute(api.Group("/users"))
 	//routes.AuthRoute(api.Group("/auth"))
 }

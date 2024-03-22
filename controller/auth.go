@@ -57,22 +57,42 @@ func LoginAdmin(c *fiber.Ctx) error {
 func RegisterCustomer(c *fiber.Ctx) error {
 	data := new(models.Users)
 	data.CreatedAt = time.Now().UTC()
-
 	// validate the request body
 	if err := c.BodyParser(data); err != nil {
 		fmt.Print(err, "this is error")
 		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
 	}
-	fmt.Print(data)
-
 	collection := database.GetCollection("users")
-	fmt.Print(collection)
 	result, err := collection.InsertOne(c.Context(), data)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"Internal server error": err.Error()})
 	}
-
 	// return the inserted todo
 	fmt.Print(result.InsertedID)
 	return c.Status(200).JSON(fiber.Map{"inserted_id": result.InsertedID})
+}
+
+func LoginCustomer(c *fiber.Ctx) error {
+	collection := database.GetCollection("users")
+	user := new(models.Users)
+
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid request body",
+		})
+	}
+	// Get email from the request body
+	filter := bson.M{"email": user.Email}
+	var foundUser models.Users
+
+	err := collection.FindOne(context.Background(), filter).Decode(&foundUser)
+	if err != nil {
+		fmt.Println(err)
+		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
+	}
+
+	token := GenerateToken(foundUser.Id.Hex(), foundUser.Username)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
 }

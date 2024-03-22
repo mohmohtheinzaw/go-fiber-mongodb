@@ -31,18 +31,11 @@ func Create(c *fiber.Ctx) error {
 		fmt.Print(err, "this is error")
 		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
 	}
-	fmt.Print(data)
-
 	collection := database.GetCollection("admins")
-	fmt.Print(collection)
 	result, err := collection.InsertOne(c.Context(), data)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"Internal server error": err.Error()})
 	}
-	// Generate token
-
-	token := GenerateToken(data.Id.Hex(), data.Name)
-	fmt.Print(token)
 
 	// return the inserted todo
 	fmt.Print(result.InsertedID)
