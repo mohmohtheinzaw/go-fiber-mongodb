@@ -41,7 +41,7 @@ func Create(c *fiber.Ctx) error {
 	}
 	// Generate token
 
-	token := GenerateToken(data.Id.Hex())
+	token := GenerateToken(data.Id.Hex(), data.Name)
 	fmt.Print(token)
 
 	// return the inserted todo
@@ -87,7 +87,7 @@ func GetOneAdmin(c *fiber.Ctx) error {
 	var admin models.Admins
 
 	err = coll.FindOne(c.Context(), filter).Decode(&admin)
-	fmt.Println(admin)
+	fmt.Println(admin.Id.Hex())
 	if err != nil {
 		return c.Status(404).JSON(fiber.Map{"error": err.Error()})
 	}

@@ -11,6 +11,7 @@ import (
 func main() {
 	app := fiber.New()
 	app.Use(logger.New())
+
 	setupRoutes(app)
 
 	app.Listen(":6001")

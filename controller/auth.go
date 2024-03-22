@@ -13,10 +13,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GenerateToken(id string) string {
+func GenerateToken(_id string, name string) string {
 	claims := jwt.MapClaims{
-		"id":  id,
-		"exp": time.Now().Add(time.Hour * 72).Unix(),
+		"id":   _id,
+		"name": name,
+		"exp":  time.Now().Add(time.Hour * 72).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	t, _ := token.SignedString([]byte("secret"))
@@ -47,17 +48,31 @@ func LoginAdmin(c *fiber.Ctx) error {
 	}
 
 	// Generate token
-	token := GenerateToken(admin.Id.Hex())
+	fmt.Println(foundAdmin.Id, foundAdmin.Name, foundAdmin.Id.Hex())
+
+	token := GenerateToken(foundAdmin.Id.Hex(), foundAdmin.Name)
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"token": token})
 }
 
-func Validate(c *fiber.Ctx) error {
-	token := c.Get("Authorization")
+func RegisterCustomer(c *fiber.Ctx) error {
+	data := new(models.Users)
+	data.CreatedAt = time.Now().UTC()
 
-	fmt.Println(token)
-	// Get all headers
-	fmt.Println("All Headers:")
-	return ""
-	//fmt.Println(headers)
-	//middleware.ExtractTokenFromHeader(r.)
+	// validate the request body
+	if err := c.BodyParser(data); err != nil {
+		fmt.Print(err, "this is error")
+		return c.Status(400).JSON(fiber.Map{"bad input": err.Error()})
+	}
+	fmt.Print(data)
+
+	collection := database.GetCollection("users")
+	fmt.Print(collection)
+	result, err := collection.InsertOne(c.Context(), data)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"Internal server error": err.Error()})
+	}
+
+	// return the inserted todo
+	fmt.Print(result.InsertedID)
+	return c.Status(200).JSON(fiber.Map{"inserted_id": result.InsertedID})
 }

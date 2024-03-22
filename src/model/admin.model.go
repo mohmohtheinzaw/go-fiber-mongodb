@@ -7,17 +7,17 @@ import (
 )
 
 type Users struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Username  string             `bson:"username,omitempty" binding:"required"`
-	Email     string             `bson:"email,omitempty" binding:"required"`
-	CreatedAt time.Time          `bson:"createdAt,omitempty" binding:"required"`
-	UpdatedAt time.Time          `bson:"updatedAt,omitempty" binding:"required"`
+	Id        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Username  string
+	Email     string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type Admins struct {
-	Id        primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Name      string             `json:"name,omitempty" validate:"required"`
-	Email     string             `json:"email,omitempty" validate:"required"`
-	CreatedAt time.Time          `json:"createdAt"`
-	UpdatedAt time.Time          `json:"updatedAt"`
+	Id        primitive.ObjectID `bson:"_id" json:"id,omitempty"`
+	Name      string
+	Email     string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
