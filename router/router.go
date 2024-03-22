@@ -9,7 +9,7 @@ import (
 
 func AdminRoute(router fiber.Router) {
 	router.Post("/", Controllers.Create)
-	router.Get("/", Middleware.UserAuthMiddleware, Controllers.GetAll)
+	router.Get("/", Middleware.AdminAuthMiddleware, Controllers.GetAll)
 	router.Get("/:id", Controllers.GetOneAdmin)
 	router.Put("/:id", Controllers.Update)
 	router.Delete("/:id", Controllers.Delete)
@@ -20,5 +20,5 @@ func AdminRoute(router fiber.Router) {
 func UserRoute(router fiber.Router) {
 	router.Post("/", Controllers.RegisterCustomer)
 	router.Post("/login", Controllers.LoginCustomer)
-	// router.Get("/", Middleware.UserAuthMiddleware, Controllers.GetAll)
+	router.Get("/", Middleware.UserAuthMiddleware, Controllers.GetAllUsers)
 }

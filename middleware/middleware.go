@@ -70,7 +70,7 @@ func AdminAuthMiddleware(c *fiber.Ctx) error {
 }
 
 func UserAuthMiddleware(c *fiber.Ctx) error {
-	tokenString := strings.Join(c.GetReqHeaders()["token"], "")
+	tokenString := strings.Join(c.GetReqHeaders()["Token"], "")
 	if tokenString == "" {
 		return c.Status(fiber.StatusUnauthorized).SendString("Missing token")
 	}

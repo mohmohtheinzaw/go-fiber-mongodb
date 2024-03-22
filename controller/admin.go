@@ -11,16 +11,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-//	type createAdminDto struct {
-//		// Id       primitive.ObjectID `json:"omitempty"`
-//		Name     string `json:"name,omitempty" validate:"required"`
-//		Location string `json:"location,omitempty" validate:"required"`
-//		Title    string `json:"title,omitempty" validate:"required"`
-//	}
-
-type LoginType struct {
-	ID string
-}
+// type LoginType struct {
+// 	ID string
+// }
 
 func Create(c *fiber.Ctx) error {
 	data := new(models.Admins)
@@ -52,15 +45,12 @@ func GetAll(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
 	}
-
-	// convert cursor to slice
 	admins := make([]models.Admins, 0)
 	// fmt.Print(cursor.All(c.Context(), &todos))
 	if err = cursor.All(c.Context(), &admins); err != nil {
 		return c.Status(500).JSON(fiber.Map{"internal server error": err.Error()})
 	}
 
-	// return todos
 	return c.Status(200).JSON(admins)
 
 }
