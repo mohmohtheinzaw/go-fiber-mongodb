@@ -20,5 +20,5 @@ func AdminRoute(router fiber.Router) {
 func UserRoute(router fiber.Router) {
 	router.Post("/", Controllers.RegisterCustomer)
 	router.Post("/login", Controllers.LoginCustomer)
-	router.Get("/", Middleware.IsUser, Controllers.GetAllUsers)
+	router.Get("/", Middleware.IsUser, ownership.IsCurrentUser, Controllers.GetAllUsers)
 }
