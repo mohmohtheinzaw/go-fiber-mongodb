@@ -15,7 +15,6 @@ func AdminRoute(router fiber.Router) {
 	router.Put("/:id", Middleware.AdminAuthMiddleware, ownership.IsCurrentUser, Controllers.Update)
 	router.Delete("/:id", Middleware.AdminAuthMiddleware, Controllers.Delete)
 	router.Post("/login", Controllers.LoginAdmin)
-	//router.Get("/validate/test", AdminControllers.Protected)
 }
 
 func UserRoute(router fiber.Router) {
