@@ -29,7 +29,6 @@ func LoginAdmin(c *fiber.Ctx) error {
 	admin := new(models.Admins)
 
 	//Parse req.body and check validation
-
 	if err := c.BodyParser(admin); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": "Invalid request body",
@@ -43,7 +42,7 @@ func LoginAdmin(c *fiber.Ctx) error {
 	if err != nil {
 		fmt.Println(err)
 		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Invalid email or password",
+			"message": "Invalid email",
 		})
 	}
 
