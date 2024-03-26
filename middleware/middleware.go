@@ -23,7 +23,7 @@ func VerifyToken(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func AdminAuthMiddleware(c *fiber.Ctx) error {
+func IsAdmin(c *fiber.Ctx) error {
 	// Extract token from request headers
 	tokenString := strings.Join(c.GetReqHeaders()["Token"], "")
 	if tokenString == "" {
@@ -69,7 +69,7 @@ func AdminAuthMiddleware(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func UserAuthMiddleware(c *fiber.Ctx) error {
+func IsUser(c *fiber.Ctx) error {
 	tokenString := strings.Join(c.GetReqHeaders()["Token"], "")
 	if tokenString == "" {
 		return c.Status(fiber.StatusUnauthorized).SendString("Missing token")
